@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "886755733560",
+    "project_id": "masterm-eac66",
+    "storage_bucket": "masterm-eac66.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886755733560:android:c007615920200f1cc076cd",
+        "android_client_info": {
+          "package_name": "com.example.moviemaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886755733560-8ahhpm8ss20ts4ah468udlcoft5irlop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5nb9J8u302V8KJuS8IvUmaj3PMMZcdtI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886755733560-8ahhpm8ss20ts4ah468udlcoft5irlop.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
