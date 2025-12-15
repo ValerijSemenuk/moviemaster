@@ -4,10 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:moviemaster/presentation/blocs/movie_bloc/movie_bloc.dart';
 import 'package:moviemaster/presentation/widgets/movie_card.dart';
 import 'package:moviemaster/presentation/pages/favorites_page.dart';
-
-import '../blocs/auth_bloc/auth_bloc.dart';
-import '../blocs/favorites_bloc/favorites_bloc.dart';
-import '../widgets/search_bar.dart';
+import 'package:moviemaster/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:moviemaster/presentation/blocs/favorites_bloc/favorites_bloc.dart';
+import 'package:moviemaster/presentation/blocs/theme_bloc/theme_bloc.dart';
+import 'package:moviemaster/presentation/widgets/search_bar.dart';
+import 'package:moviemaster/presentation/widgets/theme_switch.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           actions: [
+            const ThemeSwitch(),
             IconButton(
               icon: const Icon(Icons.refresh),
               onPressed: () {

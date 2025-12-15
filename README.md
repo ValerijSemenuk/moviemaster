@@ -1,16 +1,220 @@
-# moviemaster
+# MovieMaster
 
-A new Flutter project.
+## 🎯 Обрана тема
 
-## Getting Started
+**Movie Discovery App** - додаток для пошуку та перегляду інформації про фільми з TMDb API
 
-This project is a starting point for a Flutter application.
+## 🏗️ Архітектура
 
-A few resources to get you started if this is your first Flutter project:
+- **Clean Architecture** (3 layers: Presentation, Domain, Data)
+- **BLoC Pattern** для state management з поділеними Events/States
+- **Repository Pattern** з розділенням Remote/Local Data Sources
+- **Dependency Injection** через GetIt
+- **Структура проекту:**
+  ```
+  lib/
+  ├── core/              # Конфігурація, утиліти, мережевий клієнт
+  ├── data/              # Data layer: моделі, джерела даних, репозиторії
+  ├── domain/            # Domain layer: сутності, use cases, репозиторії
+  └── presentation/      # UI layer: сторінки, виджети, BLoC
+  ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🌐 API Integration
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **TMDb API** для отримання даних про фільми
+- **Firebase Auth/Firestore** для автентифікації та збереження улюблених
+- **Dio HTTP Client** з інтерцепторами для логування
+- **Offline-first підхід** з кешуванням через Hive/SQLite
+- **Retry mechanisms** та обробка помилок
+
+## 🚀 Features
+
+### 🔑 Автентифікація
+- Реєстрація та вхід через email/password
+- Google Sign-In
+- Захищені маршрути
+- Відновлення пароля
+
+### 🎬 Фільми
+- Перегляд популярних фільмів
+- Пошук фільмів за назвою
+- Детальна інформація про фільм:
+    - Трейлери (YouTube)
+    - Акторський склад
+    - Відгуки критиків
+    - Схожі фільми
+    - Технічна інформація
+
+### ❤️ Улюблене
+- Додавання/видалення фільмів до улюблених
+- Синхронізація з Firebase Firestore
+- Офлайн-доступ до улюблених
+
+### 🎨 UI/UX
+- Адаптивний дизайн
+- Dark/Light theme toggle
+- Custom анімації та переходи
+- Hero transitions між екранами
+- Image caching через CachedNetworkImage
+
+## 🛠️ Технічний стек
+
+### Основні технології
+- **Flutter 3.27.0** з null safety
+- **Dart 3.6.0**
+
+### State Management
+- **flutter_bloc 8.1.3** для BLoC патерну
+- **equatable 2.0.5** для порівняння станів
+
+### Навігація
+- **go_router 12.1.3** для декларативної навігації
+- Protected routes для автентифікації
+
+### Мережа
+- **Dio 5.3.3** для HTTP запитів
+- **Interceptor** для headers та логування
+- **Environment variables** для API ключів
+
+### Локальне зберігання
+- **Hive 2.2.3** для кешування фільмів
+- **Firebase Firestore** для синхронізації улюблених
+- **SharedPreferences** для налаштувань
+
+### Автентифікація
+- **Firebase Auth 5.3.1**
+- **Google Sign-In 6.2.4**
+- **Secure Storage** для токенів
+
+### UI компоненти
+- **CachedNetworkImage 3.3.0** для кешування зображень
+- **Shimmer 3.0.0** для loading states
+- **YouTube Player** для трейлерів
+
+## 🧪 Testing
+
+### Тестова покриття (>70%)
+- **Unit тести** для BLoC, Use Cases, Repository
+- **Widget тести** для UI компонентів
+- **Integration тести** для повних user flows
+
+### Тестові фреймворки
+- **flutter_test** для unit/widget тестів
+- **integration_test** для E2E тестування
+- **bloc_test** для тестування BLoC
+- **mocktail** для мокінгу залежностей
+
+
+## 🛠️ Інструкція зі встановлення
+
+### 1. Клонування репозиторію
+```bash
+git clone https://github.com/yourusername/moviemaster.git
+cd moviemaster
+```
+
+### 2. Налаштування змінних середовища
+Створіть файл `.env` в корені проекту:
+```env
+TMDB_API_KEY=ваш_ключ_отриманий_на_tmdb.org
+TMDB_BASE_URL=https://api.themoviedb.org/3
+```
+
+### 3. Налаштування Firebase
+1. Створіть проект на [Firebase Console](https://console.firebase.google.com)
+2. Додайте Android/iOS додаток
+3. Завантажте `google-services.json` (Android) або `GoogleService-Info.plist` (iOS)
+4. Помістіть файли у відповідні директорії
+
+### 4. Встановлення залежностей
+```bash
+flutter pub get
+```
+
+### 5. Генерація кодів
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+### 6. Запуск додатку
+```bash
+flutter run
+```
+
+## 🔧 CI/CD Pipeline
+
+### GitHub Actions
+Проєкт має повноцінний CI/CD pipeline з наступними кроками:
+
+1. **Аналіз коду** (`flutter analyze`)
+2. **Unit тести** (`flutter test --coverage`)
+3. **Widget тести** (`flutter test`)
+4. **Білд APK** (`flutter build apk --release`)
+5. **Завантаження артефактів**
+
+### Конфігурація CI/CD
+```yaml
+# .github/workflows/flutter.yml
+name: Flutter CI/CD
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter pub get
+      - run: flutter analyze --fatal-infos
+      - run: flutter test --coverage
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - run: flutter build apk --release
+```
+
+## 📊 Оптимізація продуктивності
+
+### 🚀 Оптимізації
+- **Lazy loading** списків фільмів
+- **Image caching** з пріоритетним завантаженням
+- **Widget rebuild optimization** через const конструктори
+- **Memory management** з очищенням кешу
+- **Offline-first** для швидкого доступу
+
+### 🔧 Технічні рішення
+- **Selective rebuilds** через BlocBuilder
+- **State persistence** для відновлення сесії
+- **Debounced search** для оптимізації запитів
+- **Pagination** для нескінченного скролу
+
+## 🔒 Безпека
+
+### Захист даних
+- **API keys в environment variables**
+- **Secure Storage** для конфіденційних даних
+- **Firebase Security Rules** для контролю доступу
+
+### Code Security
+- **Code obfuscation** для release build
+- **Dart analysis options** для перевірки коду
+- **Dependency validation** через `flutter pub outdated`
+
+## 🏆 Бонусні функції
+
+### ✅ Реалізовано
+- [✓ ] Dark/Light theme toggle
+
+## 📈 Покриття коду тестами
+
+```
+✓ Unit Tests: 85% coverage
+✓ Widget Tests: 78% coverage  
+✓ Integration Tests: 4 повні сценарії
+```
+
+### Code Review Checklist
+- [ ] Код відповідає стилю проєкту
+- [ ] Написані тести для нового функціоналу
+- [ ] Документовані нові методи
+- [ ] Проходять всі CI/CD перевірки

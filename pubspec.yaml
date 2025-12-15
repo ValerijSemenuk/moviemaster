@@ -41,7 +41,7 @@ dependencies:
   # Dependency Injection
   get_it: ^7.6.4
   flutter_dotenv: ^5.1.0
-
+  shared_preferences: ^2.2.2
   # Для сторінки деталей: стабільний пакет для YouTube
   youtube_player_iframe: ^5.2.2 # Оновлена, стабільна версія[citation:3][citation:6]
   url_launcher: ^6.2.2

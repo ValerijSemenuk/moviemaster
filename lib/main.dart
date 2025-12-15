@@ -9,6 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:moviemaster/presentation/blocs/movie_details_bloc/movie_details_bloc.dart';
+import 'package:moviemaster/presentation/blocs/theme_bloc/theme_bloc.dart';
 import 'package:moviemaster/presentation/pages/home_page.dart';
 import 'package:moviemaster/presentation/pages/movie_details_page.dart';
 import 'data/datasources/movie_local_data_source.dart';
@@ -123,9 +124,7 @@ Future<void> main() async {
     if (integrationTest) {
       isTestEnvironment = true;
     }
-  } catch (e) {
-    // Ігноруємо помилки читання змінних середовища
-  }
+  } catch (e) {}
 
   if (!isTestEnvironment) {
     print('Початок ініціалізації додатка...');
@@ -353,59 +352,85 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) => getIt<AuthBloc>(),
         ),
+        BlocProvider<ThemeBloc>(
+          create: (context) => ThemeBloc(),
+        ),
       ],
-      child: MaterialApp.router(
-        title: 'MovieMaster',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.deepPurple,
-            foregroundColor: Colors.white,
-            elevation: 0,
-            centerTitle: true,
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            filled: true,
-            fillColor: Colors.grey.shade50,
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, themeState) {
+          print('🔵 Поточна тема: ${themeState.isDarkMode ? 'Темна' : 'Світла'}');
+
+          return MaterialApp.router(
+            title: 'MovieMaster',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepPurple,
+                brightness: Brightness.light,
               ),
-              textStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                centerTitle: true,
+              ),
+              tabBarTheme: TabBarThemeData(
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white70,
+                indicatorColor: Colors.white,
+                labelPadding: EdgeInsets.zero,
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade50,
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        darkTheme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          brightness: Brightness.dark,
-          useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.deepPurple,
-            foregroundColor: Colors.white,
-            elevation: 0,
-            centerTitle: true,
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+            darkTheme: ThemeData.dark().copyWith(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepPurple,
+                brightness: Brightness.dark,
+              ),
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Color(0xFF121212),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                centerTitle: true,
+              ),
+              tabBarTheme: TabBarThemeData(
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white70,
+                indicatorColor: Colors.white,
+                labelPadding: EdgeInsets.zero,
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade800,
+              ),
             ),
-            filled: true,
-            fillColor: Colors.grey.shade800,
-          ),
-        ),
-        themeMode: ThemeMode.system,
-        routerConfig: router,
+            themeMode: themeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            routerConfig: router,
+          );
+        },
       ),
     );
   }

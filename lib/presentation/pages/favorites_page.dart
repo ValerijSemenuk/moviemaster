@@ -18,18 +18,23 @@ class FavoritesPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.favorite_border, size: 64, color: Colors.grey),
+                Icon(
+                  Icons.favorite_border,
+                  size: 64,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'Увійдіть, щоб переглядати улюблені фільми',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {
-                    context.go('/login');
-                  },
+                  onPressed: () => context.go('/login'),
                   child: const Text('Увійти'),
                 ),
               ],
@@ -119,14 +124,13 @@ class FavoritesPage extends StatelessWidget {
                   final movie = favoritesState.favoriteMovies[index];
                   return MovieCard(
                     movie: movie,
-                    onTap: () {
-                      context.go('/movie/${movie.id}');
-                    },
+                    onTap: () => context.go('/movie/${movie.id}'),
                   );
                 },
               );
             }
 
+            // Ініціалізація завантаження
             WidgetsBinding.instance.addPostFrameCallback((_) {
               context.read<FavoritesBloc>().add(
                 LoadFavoritesEvent(userId: authState.user.id),

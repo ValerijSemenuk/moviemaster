@@ -29,6 +29,7 @@ import 'package:moviemaster/domain/usecases/search_movies.dart';
 import 'package:moviemaster/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:moviemaster/presentation/blocs/movie_bloc/movie_bloc.dart';
 import 'package:moviemaster/presentation/blocs/favorites_bloc/favorites_bloc.dart';
+import 'package:moviemaster/presentation/blocs/theme_bloc/theme_bloc.dart';
 import 'package:moviemaster/presentation/pages/auth/login_page.dart';
 import 'package:moviemaster/presentation/pages/auth/register_page.dart';
 import 'package:moviemaster/presentation/pages/auth/forgot_password_page.dart';
@@ -264,6 +265,10 @@ Future<void> setupTestDependencies() async {
     ),
   );
 
+  getIt.registerLazySingleton<ThemeBloc>(
+        () => ThemeBloc(),
+  );
+
   print('Test: Dependencies set up successfully');
 }
 
@@ -423,15 +428,31 @@ class TestApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) => getIt<AuthBloc>(),
         ),
-      ],
-      child: MaterialApp.router(
-        title: 'MovieMaster (Test)',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          useMaterial3: true,
+        BlocProvider<ThemeBloc>(
+          create: (context) => getIt<ThemeBloc>(),
         ),
-        routerConfig: router,
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, themeState) {
+          return MaterialApp.router(
+            title: 'MovieMaster (Test)',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepPurple,
+                brightness: Brightness.light,
+              ),
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepPurple,
+                brightness: Brightness.dark,
+              ),
+            ),
+            themeMode: themeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            routerConfig: router,
+          );
+        },
       ),
     );
   }
