@@ -2,7 +2,7 @@ name: Flutter CI/CD
 
 on:
   push:
-    branches: [ master ]  # Твоя гілка називається master
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -33,7 +33,7 @@ jobs:
         run: flutter build apk --release
 
       - name: 📤 Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: moviemaster-apk
           path: build/app/outputs/flutter-apk/app-release.apk
